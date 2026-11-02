@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Study Guide</title>
+  <style>
+    html, body, iframe {
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      border: 0;
+    }
+
+    #status {
+      box-sizing: border-box;
+      padding: 1rem;
+      font: 16px system-ui, sans-serif;
+    }
+  </style>
+</head>
+<body>
+  <div id="status">Loading study guide…</div>
+  <iframe id="document" title="Study guide"></iframe>
+
+  <script>
+    const documentUrl = 'https://raw.githubusercontent.com/ethanchester/studyguides/refs/heads/main/studyguide';
+    const frame = document.getElementById('document');
+    const status = document.getElementById('status');
+
+    frame.hidden = true;
+
+    fetch(documentUrl)
+      .then(response => {
+        if (!response.ok) {
+          throw new Error(`Request failed (${response.status})`);
+        }
+        return response.text();
+      })
+      .then(contents => {
+        frame.srcdoc = contents;
+        frame.hidden = false;
+        status.remove();
+      })
+      .catch(error => {
+        status.textContent = `Could not load the study guide: ${error.message}`;
+      });
+  </script>
+</body>
+</html>
